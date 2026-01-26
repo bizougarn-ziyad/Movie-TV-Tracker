@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Navbar from './components/Navbar';
 import MovieCarousel from './components/MovieCarousel';
 
 export default function App() {
@@ -58,11 +59,9 @@ export default function App() {
 
   return (
     <div className="bg-gray-900 min-h-screen">
+      <Navbar />
       <MovieCarousel movies={movies} />
-      <div className="px-8 pb-8">
-        <h1 className="text-4xl font-bold text-center mb-12 text-white">
-          Movie Tracker 🎬
-        </h1>
+      <div className="px-8 pb-8 pt-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
           {movies.map((movie, index) => (
             <div key={index} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow">
