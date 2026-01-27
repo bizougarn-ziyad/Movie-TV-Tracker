@@ -22,7 +22,7 @@ export default function Navbar() {
           {/* Logo/Title */}
           <div className="flex-shrink-0">
             <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
-              MovieTracker
+              Projection
             </span>
           </div>
 
