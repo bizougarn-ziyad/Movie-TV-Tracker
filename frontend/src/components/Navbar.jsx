@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function Navbar() {
+export default function Navbar({ onSignUpClick }) {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -41,10 +43,16 @@ export default function Navbar() {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <button className="px-6 py-2 border-2 border-blue-500 text-blue-500 rounded-lg font-semibold transition-all duration-300 ease-in-out hover:bg-blue-500 hover:text-white">
+            <button 
+              onClick={() => navigate('/login')}
+              className="px-6 py-2 border-2 border-blue-500 text-blue-500 rounded-lg font-semibold transition-all duration-300 ease-in-out hover:bg-blue-500 hover:text-white"
+            >
               Login
             </button>
-            <button className="px-6 py-2 border-2 border-red-500 text-red-500 rounded-lg font-semibold transition-all duration-300 ease-in-out hover:bg-red-500 hover:text-white">
+            <button 
+              onClick={onSignUpClick}
+              className="px-6 py-2 border-2 border-red-500 text-red-500 rounded-lg font-semibold transition-all duration-300 ease-in-out hover:bg-red-500 hover:text-white"
+            >
               Sign Up
             </button>
           </div>

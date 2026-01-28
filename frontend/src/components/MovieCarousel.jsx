@@ -5,7 +5,7 @@ export default function MovieCarousel({ movies }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const timerRef = useRef(null);
 
-  const TMDB_API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZmJiMWFlYmE5MDc3MGM3YzUyNzI2Njg1NDU1ZTA3MCIsIm5iZiI6MTc1ODc0NDU5OC40NDk5OTk5LCJzdWIiOiI2OGQ0NTAxNjNjN2M1NmQ5MTBlNzIyZTAiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.Wyls449PmYczveDSVO_VwR32d9vwjO-InApFO2c2B6k';
+  const TMDB_API_KEY = '305ceec31bd18c4544e0297ac07b0c82';
 
   const displayMovies = movies.slice(0, 10);
 
