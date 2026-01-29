@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import MovieCarousel from '../components/MovieCarousel';
-import StreamingPlatforms from '../components/StreamingPlatforms';
-import MovieCategoriesCarousel from '../components/MovieCategoriesCarousel';
-import SignUp from '../components/SignUp';
+import { useState, useEffect } from "react";
+import MovieCarousel from "../components/MovieCarousel";
+import StreamingPlatforms from "../components/StreamingPlatforms";
+import MovieCategoriesCarousel from "../components/MovieCategoriesCarousel";
+import SignUp from "../components/SignUp";
 
 export default function Dashboard() {
   const [movies, setMovies] = useState([]);
@@ -11,25 +10,26 @@ export default function Dashboard() {
   const [error, setError] = useState(null);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
 
-  const TMDB_API_KEY = '305ceec31bd18c4544e0297ac07b0c82';
+  const TMDB_API_KEY = "305ceec31bd18c4544e0297ac07b0c82";
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         setLoading(true);
+
         const response = await fetch(
           `https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_API_KEY}&language=en-US&page=1`
         );
 
         if (!response.ok) {
-          throw new Error('Failed to fetch from TMDB');
+          throw new Error("Failed to fetch from TMDB");
         }
 
         const data = await response.json();
         setMovies(data.results || []);
         setError(null);
       } catch (err) {
-        setError('Failed to fetch movies. Please check your API key.');
+        setError("Failed to fetch movies. Please check your API key.");
         console.error(err);
       } finally {
         setLoading(false);
@@ -39,41 +39,61 @@ export default function Dashboard() {
     fetchMovies();
   }, []);
 
+  /* ✅ Loading Screen */
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-900">
-        <p className="text-white text-2xl">Loading movies...</p>
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-white text-2xl font-semibold">
+          Loading movies...
+        </p>
       </div>
     );
   }
 
+  /* ✅ Error Screen */
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-900">
-        <p className="text-red-500 text-2xl">{error}</p>
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-red-500 text-2xl font-semibold">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-900 min-h-screen">
-      <Navbar onSignUpClick={() => setShowSignUpModal(true)} />
+    <div className="min-h-screen text-white">
+      {/* ✅ SignUp Modal */}
       {showSignUpModal && (
         <SignUp onClose={() => setShowSignUpModal(false)} />
       )}
+
+      {/* ✅ Hero Carousel */}
       <MovieCarousel movies={movies} />
+
+      {/* ✅ Streaming Platforms Row */}
       <StreamingPlatforms />
+
+      {/* ✅ Categories Carousel */}
       <MovieCategoriesCarousel />
-      <div className="px-8 pb-8 pt-12">
+
+      {/* ✅ Movie Grid Section */}
+      <div className="px-8 pb-12 pt-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
           {movies.map((movie, index) => (
-            <div key={index} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow">
-              {/* Poster */}
-              <div className="h-64 overflow-hidden bg-gray-700">
+            <div
+              key={index}
+              className="
+              bg-white/5 backdrop-blur-md border border-white/10
+              rounded-xl overflow-hidden shadow-lg
+              hover:scale-105 transition duration-300
+              cursor-pointer
+              "
+            >
+              {/* ✅ Poster */}
+              <div className="h-64 overflow-hidden bg-black/20">
                 {movie.poster_path ? (
-                  <img 
+                  <img
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    alt={movie.title || movie.original_title}
+                    alt={movie.title}
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -82,32 +102,35 @@ export default function Dashboard() {
                   </div>
                 )}
               </div>
-              
-              {/* Content */}
+
+              {/* ✅ Movie Info */}
               <div className="p-4">
                 {/* Title */}
-                <h2 className="text-lg font-bold text-white mb-2 line-clamp-2">
-                  {movie.title || movie.original_title}
+                <h2 className="text-lg font-bold mb-2 line-clamp-2">
+                  {movie.title}
                 </h2>
-                
+
                 {/* Rating */}
-                <div className="mb-3">
-                  <p className="text-sm text-gray-300">
-                    <span className="font-semibold">Rating:</span> {' '}
-                    <span className="text-yellow-400 font-bold">
-                      {movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'} / 10
-                    </span>
-                  </p>
-                </div>
-                
-                {/* Description (Overview) */}
-                <p className="text-sm text-gray-300 line-clamp-3">
-                  {movie.overview || 'No description available'}
+                <p className="text-sm text-gray-300 mb-2">
+                  Rating:{" "}
+                  <span className="text-yellow-400 font-semibold">
+                    {movie.vote_average
+                      ? movie.vote_average.toFixed(1)
+                      : "N/A"}{" "}
+                    / 10
+                  </span>
                 </p>
-                
-                {/* Release Year */}
-                <p className="text-xs text-gray-400 mt-3">
-                  {movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A'}
+
+                {/* Overview */}
+                <p className="text-sm text-gray-400 line-clamp-3">
+                  {movie.overview || "No description available"}
+                </p>
+
+                {/* Year */}
+                <p className="text-xs text-gray-500 mt-3">
+                  {movie.release_date
+                    ? new Date(movie.release_date).getFullYear()
+                    : "N/A"}
                 </p>
               </div>
             </div>
