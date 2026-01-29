@@ -43,6 +43,13 @@ export default function Navbar({ onSignUpClick }) {
             >
               Movies
             </button>
+            
+            <button
+              onClick={() => navigate("/series")}
+              className="hover:text-white transition"
+            >
+              Series
+            </button>
 
             <button
               onClick={() => navigate("/dashboard")}
@@ -50,6 +57,8 @@ export default function Navbar({ onSignUpClick }) {
             >
               Dashboard
             </button>
+
+            
           </div>
 
           {/* ✅ Desktop Search */}
