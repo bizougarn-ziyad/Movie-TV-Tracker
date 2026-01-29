@@ -100,7 +100,7 @@ export default function Navbar({ onSignUpClick }) {
                 </button>
 
                 <button
-                  onClick={onSignUpClick}
+                  onClick={() => navigate("/signup")}
                   className="w-full text-left px-4 py-2 text-gray-300 hover:bg-slate-700"
                 >
                   Sign Up

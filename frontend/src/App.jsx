@@ -4,6 +4,8 @@ import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Login from "./components/Login";
 import SearchResults from "./pages/SearchResults";
+import SignUp from "./components/SignUp";
+
 
 export default function App() {
   return (
@@ -15,6 +17,8 @@ export default function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/search" element={<SearchResults />} />
+        <Route path="/signup" element={<SignUp />} />
+
       </Routes>
       
     </Router>

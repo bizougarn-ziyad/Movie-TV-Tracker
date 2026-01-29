@@ -42,7 +42,7 @@ export default function Dashboard() {
   /* ✅ Loading Screen */
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-center items-center min-h-screen bg-[#071427]">
         <p className="text-white text-2xl font-semibold">
           Loading movies...
         </p>
@@ -53,14 +53,18 @@ export default function Dashboard() {
   /* ✅ Error Screen */
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-center items-center min-h-screen bg-[#071427]">
         <p className="text-red-500 text-2xl font-semibold">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen text-white">
+    /* ✅ Background uniforme comme Carousel */
+    <div
+      className="min-h-screen text-white"
+      style={{ backgroundColor: "#071427" }}
+    >
       {/* ✅ SignUp Modal */}
       {showSignUpModal && (
         <SignUp onClose={() => setShowSignUpModal(false)} />
@@ -82,10 +86,10 @@ export default function Dashboard() {
             <div
               key={index}
               className="
-              bg-white/5 backdrop-blur-md border border-white/10
-              rounded-xl overflow-hidden shadow-lg
-              hover:scale-105 transition duration-300
-              cursor-pointer
+                bg-white/5 backdrop-blur-md border border-white/10
+                rounded-xl overflow-hidden shadow-lg
+                hover:scale-105 transition duration-300
+                cursor-pointer
               "
             >
               {/* ✅ Poster */}
@@ -105,12 +109,10 @@ export default function Dashboard() {
 
               {/* ✅ Movie Info */}
               <div className="p-4">
-                {/* Title */}
                 <h2 className="text-lg font-bold mb-2 line-clamp-2">
                   {movie.title}
                 </h2>
 
-                {/* Rating */}
                 <p className="text-sm text-gray-300 mb-2">
                   Rating:{" "}
                   <span className="text-yellow-400 font-semibold">
@@ -121,12 +123,10 @@ export default function Dashboard() {
                   </span>
                 </p>
 
-                {/* Overview */}
                 <p className="text-sm text-gray-400 line-clamp-3">
                   {movie.overview || "No description available"}
                 </p>
 
-                {/* Year */}
                 <p className="text-xs text-gray-500 mt-3">
                   {movie.release_date
                     ? new Date(movie.release_date).getFullYear()
