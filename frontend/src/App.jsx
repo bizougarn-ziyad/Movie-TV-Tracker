@@ -5,12 +5,15 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./components/Login";
 import SearchResults from "./pages/SearchResults";
 import SignUp from "./components/SignUp";
+import Collections from "./pages/Collections";
+import CollectionDetail from "./pages/CollectionDetail";
+import GenrePage from "./pages/GenrePage";
 
 
 export default function App() {
   return (
     <Router>
-     
+
       <Navbar />
 
       <Routes>
@@ -18,9 +21,12 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/collections" element={<Collections />} />
+        <Route path="/collection/:id" element={<CollectionDetail />} />
+        <Route path="/genre/:genre" element={<GenrePage />} />
 
       </Routes>
-      
+
     </Router>
   );
 }
