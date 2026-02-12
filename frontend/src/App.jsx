@@ -8,6 +8,7 @@ import SignUp from "./components/SignUp";
 import Collections from "./pages/Collections";
 import CollectionDetail from "./pages/CollectionDetail";
 import GenrePage from "./pages/GenrePage";
+import Movies from "./pages/Movies";
 
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/collections" element={<Collections />} />
         <Route path="/collection/:id" element={<CollectionDetail />} />
         <Route path="/genre/:genre" element={<GenrePage />} />
+        <Route path="/movies" element={<Movies />} />
 
       </Routes>
 
