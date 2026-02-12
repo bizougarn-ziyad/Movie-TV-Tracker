@@ -8,6 +8,9 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  // Check if form fields are filled
+  const isFormValid = email.trim() && password.trim();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
@@ -42,6 +45,17 @@ export default function Login() {
     <div className="login-container">
       <div className="login-wrapper">
         <div className="login-card">
+          <div className="login-header">
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              className="go-back-button"
+              aria-label="Go back to home page"
+            >
+              ← Go Back
+            </button>
+          </div>
+
           <h1 className="login-title">Projection</h1>
           <p className="login-subtitle">Sign in to your account</p>
 
@@ -76,7 +90,11 @@ export default function Login() {
               />
             </div>
 
-            <button type="submit" className="login-button">
+            <button
+              type="submit"
+              className="login-button"
+              disabled={!isFormValid}
+            >
               Login
             </button>
           </form>

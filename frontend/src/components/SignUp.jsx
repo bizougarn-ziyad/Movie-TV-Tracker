@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./SignUp.css";
 
 export default function SignUp({ onClose }) {
-  const navigate = useNavigate(); // ✅ IMPORTANT
+  const navigate = useNavigate();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -12,18 +12,27 @@ export default function SignUp({ onClose }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // Check if form fields are filled
+  const isFormValid =
+    fullName.trim() &&
+    email.trim() &&
+    password.trim() &&
+    confirmPassword.trim() &&
+    password === confirmPassword &&
+    password.length >= 6;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
-    // ✅ Full Name Validation
+    // Full Name Validation
     if (!fullName.trim()) {
       setError("Full name is required");
       return;
     }
 
-    // ✅ Email Validation
+    // Email Validation
     if (!email.trim()) {
       setError("Email is required");
       return;
@@ -35,7 +44,7 @@ export default function SignUp({ onClose }) {
       return;
     }
 
-    // ✅ Password Validation
+    // Password Validation
     if (!password.trim()) {
       setError("Password is required");
       return;
@@ -46,7 +55,7 @@ export default function SignUp({ onClose }) {
       return;
     }
 
-    // ✅ Confirm Password
+    // Confirm Password
     if (!confirmPassword.trim()) {
       setError("Please confirm your password");
       return;
@@ -57,123 +66,121 @@ export default function SignUp({ onClose }) {
       return;
     }
 
-    // ✅ Signup Success (Placeholder)
+    // Signup Success (Placeholder)
     console.log("Sign up attempt:", { fullName, email, password });
     setSuccess("Account created successfully!");
 
-    // ✅ Reset Form
+    // Reset Form
     setFullName("");
     setEmail("");
     setPassword("");
     setConfirmPassword("");
 
-    // ✅ Close Modal after 1 second
+    // Navigate after 1 second
     setTimeout(() => {
-      onClose();
+      navigate("/");
     }, 1000);
   };
 
   return (
-    <div className="signup-overlay">
-      <div className="signup-container">
-        <div className="signup-wrapper">
-          <div className="signup-card">
+    <div className="signup-container">
+      <div className="signup-wrapper">
+        <div className="signup-card">
+          <div className="signup-header">
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="go-back-button"
+              aria-label="Go back to home page"
+            >
+              ← Go Back
+            </button>
+          </div>
 
-            {/* ✅ Title */}
-            <h1 className="signup-title">Projection</h1>
-            <p className="signup-subtitle">Create your account</p>
+          <h1 className="signup-title">Projection</h1>
+          <p className="signup-subtitle">Create your account</p>
 
-            {/* ✅ Errors */}
-            {error && <div className="signup-error">{error}</div>}
+          {error && <div className="signup-error">{error}</div>}
 
-            {/* ✅ Success */}
-            {success && <div className="signup-success">{success}</div>}
+          {success && <div className="signup-success">{success}</div>}
 
-            {/* ✅ Form */}
-            <form onSubmit={handleSubmit} className="signup-form">
-              {/* Full Name */}
-              <div className="form-group">
-                <label htmlFor="fullName" className="form-label">
-                  Full Name
-                </label>
-                <input
-                  id="fullName"
-                  type="text"
-                  className="form-input"
-                  placeholder="Enter your full name"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                />
-              </div>
-
-              {/* Email */}
-              <div className="form-group">
-                <label htmlFor="email" className="form-label">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  className="form-input"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-
-              {/* Password */}
-              <div className="form-group">
-                <label htmlFor="password" className="form-label">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  className="form-input"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-
-              {/* Confirm Password */}
-              <div className="form-group">
-                <label htmlFor="confirmPassword" className="form-label">
-                  Confirm Password
-                </label>
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  className="form-input"
-                  placeholder="Confirm your password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
-
-              {/* ✅ Submit */}
-              <button type="submit" className="signup-button">
-                Create Account
-              </button>
-            </form>
-
-            {/* ✅ Footer */}
-            <div className="signup-footer">
-              <p className="login-text">
-                Already have an account?{" "}
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose(); // ✅ Close Modal
-                    navigate("/dashboard"); // ✅ Go Back Dashboard
-                  }}
-                  className="login-link"
-                >
-                  Back to Dashboard
-                </button>
-              </p>
+          <form onSubmit={handleSubmit} className="signup-form">
+            <div className="form-group">
+              <label htmlFor="fullName" className="form-label">
+                Full Name
+              </label>
+              <input
+                id="fullName"
+                type="text"
+                className="form-input"
+                placeholder="Enter your full name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
             </div>
 
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                className="form-input"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                className="form-input"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="confirmPassword" className="form-label">
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                type="password"
+                className="form-input"
+                placeholder="Confirm your password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="signup-button"
+              disabled={!isFormValid}
+            >
+              Create Account
+            </button>
+          </form>
+
+          <div className="signup-footer">
+            <p className="login-text">
+              Already have an account?{" "}
+              <button
+                type="button"
+                onClick={() => navigate("/login")}
+                className="login-link"
+              >
+                Sign in
+              </button>
+            </p>
           </div>
         </div>
       </div>
