@@ -1,0 +1,177 @@
+.series-carousel-section {
+  padding: 3rem 2rem;
+  width: 100%;
+}
+
+.series-carousel-header {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.series-carousel-title-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.series-carousel-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.suggested-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Carousel Container */
+.series-carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.series-carousel-scroll {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 1rem 0;
+  flex: 1;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+
+/* Hide scrollbar for Chrome, Safari and Edge */
+.series-carousel-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.series-carousel-item {
+  flex: 0 0 calc(16.666% - 1rem);
+  min-width: 160px;
+  scroll-snap-align: start;
+}
+
+/* Navigation Buttons */
+.carousel-nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 50%;
+  color: #06b6d4;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+.carousel-nav-button:hover {
+  background: rgba(6, 182, 212, 0.3);
+  border-color: #06b6d4;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav-button.left {
+  left: 0;
+}
+
+.carousel-nav-button.right {
+  right: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .series-carousel-section {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .series-carousel-title {
+    font-size: 1.3rem;
+  }
+
+  .series-carousel-item {
+    flex: 0 0 calc(20% - 1rem);
+    min-width: 140px;
+  }
+
+  .carousel-nav-button {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .series-carousel-section {
+    padding: 2rem 1rem;
+  }
+
+  .series-carousel-title {
+    font-size: 1.1rem;
+  }
+
+  .series-carousel-item {
+    flex: 0 0 calc(25% - 1rem);
+    min-width: 130px;
+  }
+
+  .carousel-nav-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .carousel-nav-button svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .series-carousel-section {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .series-carousel-title {
+    font-size: 1rem;
+  }
+
+  .series-carousel-item {
+    flex: 0 0 calc(33.333% - 1rem);
+    min-width: 100px;
+  }
+
+  .carousel-nav-button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .carousel-nav-button svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .suggested-badge {
+    font-size: 0.65rem;
+    padding: 0.35rem 0.6rem;
+  }
+}
