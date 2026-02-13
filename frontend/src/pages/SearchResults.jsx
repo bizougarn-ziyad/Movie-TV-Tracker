@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { RingLoader } from "react-spinners";
 
 export default function SearchResults() {
@@ -8,6 +8,7 @@ export default function SearchResults() {
   const [imagesLoaded, setImagesLoaded] = useState({});
 
   const location = useLocation();
+  const navigate = useNavigate();
   const query = new URLSearchParams(location.search).get("query");
 
   const TOKEN = import.meta.env.VITE_TMDB_BEARER_TOKEN;
@@ -127,7 +128,8 @@ export default function SearchResults() {
                 return (
                   <div
                     key={`${item.media_type}-${item.id}`}
-                    className="flex gap-5 border-b border-gray-700/40 pb-6"
+                    onClick={() => navigate(item.media_type === 'movie' ? `/movie/${item.id}` : `/tv/${item.id}`)}
+                    className="flex gap-5 border-b border-gray-700/40 pb-6 cursor-pointer hover:bg-gray-800/30 p-4 rounded-lg transition-colors"
                   >
                     {/* Poster */}
                     <div className="w-[90px] flex-shrink-0">

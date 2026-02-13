@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Heart, Clock, Star, Calendar, MapPin, Users, Tv, Tag, Plus } from 'lucide-react';
+import { ArrowLeft, Heart, Clock, Star, Calendar, MapPin, Users, Tv, Tag, Plus, Play, Bookmark } from 'lucide-react';
 import { RingLoader } from 'react-spinners';
 
 const TMDB_BEARER_TOKEN = import.meta.env.VITE_TMDB_BEARER_TOKEN || "YOUR_TOKEN_HERE";
@@ -19,6 +19,11 @@ export default function SeriesDetail() {
     const [recommendationsLoading, setRecommendationsLoading] = useState(false);
     const [isFavorited, setIsFavorited] = useState(false);
     const [isWatchlisted, setIsWatchlisted] = useState(false);
+    const [showSaveMenu, setShowSaveMenu] = useState(false);
+    const [showPlayer, setShowPlayer] = useState(false);
+    const [selectedSeason, setSelectedSeason] = useState(1);
+    const [selectedEpisode, setSelectedEpisode] = useState(1);
+    const [useBackupPlayer, setUseBackupPlayer] = useState(false);
 
     // Mock collections for demo - replace with your actual collections
     const [collections] = useState([
@@ -28,6 +33,12 @@ export default function SeriesDetail() {
     ]);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+        setShowPlayer(false);
+        setShowSaveMenu(false);
+        setSelectedSeason(1);
+        setSelectedEpisode(1);
+        setUseBackupPlayer(false);
         fetchSeriesDetails();
     }, [id]);
 
@@ -190,7 +201,7 @@ export default function SeriesDetail() {
                             {/* Series Info */}
                             <div className="flex-1 space-y-4 lg:space-y-6 text-center lg:text-left max-w-4xl">
                                 {/* Back Button */}
-                                <div className="flex justify-center lg:justify-start">
+                                <div className="hidden sm:flex justify-center lg:justify-start">
                                     <button
                                         onClick={() => navigate(-1)}
                                         className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 bg-black/50 rounded-lg hover:bg-black/70 transition-colors backdrop-blur-sm text-sm mb-4"
@@ -249,44 +260,175 @@ export default function SeriesDetail() {
                                 {/* Action Buttons */}
                                 <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
                                     <button
+                                        onClick={() => setShowPlayer(!showPlayer)}
+                                        className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-green-600 hover:bg-green-700 rounded-lg transition-colors text-sm sm:text-base backdrop-blur-sm"
+                                    >
+                                        <Play size={16} className="fill-current" />
+                                        <span className="hidden sm:inline">{showPlayer ? 'Hide Player' : 'Watch Now'}</span>
+                                        <span className="sm:hidden">{showPlayer ? 'Hide' : 'Watch'}</span>
+                                    </button>
+
+                                    {/* Desktop buttons - hidden on mobile */}
+                                    <button
                                         onClick={() => setIsFavorited(!isFavorited)}
-                                        className={`flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-colors text-sm sm:text-base ${isFavorited
+                                        className={`hidden sm:flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-colors text-sm sm:text-base ${isFavorited
                                             ? 'bg-red-600 hover:bg-red-700'
                                             : 'bg-gray-700/80 hover:bg-gray-600/80'
                                             } backdrop-blur-sm`}
                                     >
                                         <Heart size={16} className={isFavorited ? 'fill-current' : ''} />
-                                        <span className="hidden sm:inline">{isFavorited ? 'Favorited' : 'Add to Favorites'}</span>
-                                        <span className="sm:hidden">♥</span>
+                                        <span>{isFavorited ? 'Favorited' : 'Add to Favorites'}</span>
                                     </button>
 
                                     <button
                                         onClick={() => setIsWatchlisted(!isWatchlisted)}
-                                        className={`flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-colors text-sm sm:text-base ${isWatchlisted
+                                        className={`hidden sm:flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-colors text-sm sm:text-base ${isWatchlisted
                                             ? 'bg-blue-600 hover:bg-blue-700'
                                             : 'bg-gray-700/80 hover:bg-gray-600/80'
                                             } backdrop-blur-sm`}
                                     >
                                         <Clock size={16} />
-                                        <span className="hidden sm:inline">{isWatchlisted ? 'In Watchlist' : 'Add to Watchlist'}</span>
-                                        <span className="sm:hidden">Watch</span>
+                                        <span>{isWatchlisted ? 'In Watchlist' : 'Add to Watchlist'}</span>
                                     </button>
 
-                                    {/* Simplified Add to List - no complex dropdown */}
                                     <button
-                                        onClick={() => handleAddToList(1)} // Default to first collection
-                                        className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-purple-600/80 hover:bg-purple-700/80 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base"
+                                        onClick={() => handleAddToList(1)}
+                                        className="hidden sm:flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-purple-600/80 hover:bg-purple-700/80 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base"
                                     >
                                         <Plus size={16} />
-                                        <span className="hidden sm:inline">Add to List</span>
-                                        <span className="sm:hidden">Save</span>
+                                        <span>Add to List</span>
                                     </button>
+
+                                    {/* Mobile Save button with dropdown */}
+                                    <div className="relative sm:hidden">
+                                        <button
+                                            onClick={() => setShowSaveMenu(!showSaveMenu)}
+                                            className="flex items-center justify-center gap-2 px-4 py-2 bg-purple-600/80 hover:bg-purple-700/80 rounded-lg transition-colors text-sm backdrop-blur-sm w-full"
+                                        >
+                                            <Bookmark size={16} />
+                                        </button>
+
+                                        {/* Dropdown Menu */}
+                                        {showSaveMenu && (
+                                            <div className="absolute bottom-full mb-2 right-0 w-48 bg-gray-900/95 backdrop-blur-sm rounded-lg shadow-xl border border-gray-700 overflow-hidden z-50">
+                                                <button
+                                                    onClick={() => {
+                                                        setIsFavorited(!isFavorited);
+                                                        setShowSaveMenu(false);
+                                                    }}
+                                                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800 transition-colors text-left text-sm"
+                                                >
+                                                    <Heart size={16} className={isFavorited ? 'fill-current text-red-500' : ''} />
+                                                    <span>{isFavorited ? 'Remove from Favorites' : 'Add to Favorites'}</span>
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        setIsWatchlisted(!isWatchlisted);
+                                                        setShowSaveMenu(false);
+                                                    }}
+                                                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800 transition-colors text-left text-sm border-t border-gray-700"
+                                                >
+                                                    <Clock size={16} className={isWatchlisted ? 'text-blue-500' : ''} />
+                                                    <span>{isWatchlisted ? 'Remove from Watchlist' : 'Add to Watchlist'}</span>
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        handleAddToList(1);
+                                                        setShowSaveMenu(false);
+                                                    }}
+                                                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800 transition-colors text-left text-sm border-t border-gray-700"
+                                                >
+                                                    <Plus size={16} />
+                                                    <span>Add to Collection</span>
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {/* Video Player Section */}
+            {showPlayer && (
+                <div className="container mx-auto px-4 sm:px-6 py-8">
+                    <div className="max-w-6xl mx-auto">
+                        {/* Player Source Toggle */}
+                        <div className="mb-4 flex justify-center gap-2">
+                            <button
+                                onClick={() => setUseBackupPlayer(false)}
+                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${!useBackupPlayer
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                                    }`}
+                            >
+                                Server 1 (VIP)
+                            </button>
+                            <button
+                                onClick={() => setUseBackupPlayer(true)}
+                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${useBackupPlayer
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                                    }`}
+                            >
+                                Server 2 (VidSrc)
+                            </button>
+                        </div>
+
+                        {/* Season and Episode Selectors */}
+                        <div className="bg-gray-900/50 backdrop-blur-sm rounded-t-lg p-4 flex flex-col sm:flex-row gap-4">
+                            <div className="flex-1">
+                                <label className="block text-sm font-medium mb-2">Season</label>
+                                <select
+                                    value={selectedSeason}
+                                    onChange={(e) => setSelectedSeason(Number(e.target.value))}
+                                    className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-700 focus:border-blue-500 focus:outline-none"
+                                >
+                                    {series?.seasons?.filter(s => s.season_number > 0).map(season => (
+                                        <option key={season.id} value={season.season_number}>
+                                            Season {season.season_number}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="flex-1">
+                                <label className="block text-sm font-medium mb-2">Episode</label>
+                                <select
+                                    value={selectedEpisode}
+                                    onChange={(e) => setSelectedEpisode(Number(e.target.value))}
+                                    className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-700 focus:border-blue-500 focus:outline-none"
+                                >
+                                    {series?.seasons?.find(s => s.season_number === selectedSeason)?.episode_count &&
+                                        Array.from({ length: series.seasons.find(s => s.season_number === selectedSeason).episode_count }, (_, i) => i + 1).map(ep => (
+                                            <option key={ep} value={ep}>
+                                                Episode {ep}
+                                            </option>
+                                        ))
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* Video Player */}
+                        <div className="bg-gray-900/50 backdrop-blur-sm rounded-b-lg overflow-hidden">
+                            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                                <iframe
+                                    key={`${useBackupPlayer ? 'backup' : 'main'}-s${selectedSeason}-e${selectedEpisode}`}
+                                    src={useBackupPlayer
+                                        ? `https://vidsrc.xyz/embed/tv/${id}/${selectedSeason}/${selectedEpisode}`
+                                        : `https://multiembed.mov/directstream.php?video_id=${id}&tmdb=1&s=${selectedSeason}&e=${selectedEpisode}`
+                                    }
+                                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                                    frameBorder="0"
+                                    allowFullScreen
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <>
                 {/* Details Section */}
@@ -459,7 +601,7 @@ export default function SeriesDetail() {
                                 {recommendations.map(rec => (
                                     <div
                                         key={rec.id}
-                                        onClick={() => navigate(`/series/${rec.id}`)}
+                                        onClick={() => navigate(`/tv/${rec.id}`)}
                                         className="bg-gray-800/30 rounded-lg hover:bg-gray-800/50 transition-colors cursor-pointer p-3"
                                     >
                                         <img
@@ -486,7 +628,7 @@ export default function SeriesDetail() {
                                 {fallbackRecommendations.map(rec => (
                                     <div
                                         key={rec.id}
-                                        onClick={() => navigate(`/series/${rec.id}`)}
+                                        onClick={() => navigate(`/tv/${rec.id}`)}
                                         className="bg-gray-800/30 rounded-lg hover:bg-gray-800/50 transition-colors cursor-pointer p-3"
                                     >
                                         <img

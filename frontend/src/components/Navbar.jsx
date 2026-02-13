@@ -143,9 +143,8 @@ export default function Navbar({ onSignUpClick }) {
   };
 
   const handleSuggestionClick = (item) => {
-    const title = item.media_type === 'movie' ? item.title : item.name;
-    setSearch(title);
-    navigate(`/search?query=${title}`);
+    const detailPath = item.media_type === 'movie' ? `/movie/${item.id}` : `/tv/${item.id}`;
+    navigate(detailPath);
     setShowSuggestions(false);
     setSearch("");
     setMobileOpen(false);
